@@ -1,29 +1,31 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useGetCustomersQuery } from '@/lib/store/api/adminApi';
-import AdminLayout from '@/components/admin/AdminLayout';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from '@/components/ui/table';
-import { Search, User, Mail, Calendar, ShoppingBag } from 'lucide-react';
+import { useState } from "react";
+import { useGetCustomersQuery } from "@/lib/store/api/adminApi";
+import AdminLayout from "@/components/admin/AdminLayout";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Search, User, Mail, Calendar, ShoppingBag } from "lucide-react";
 
 export default function AdminCustomersPage() {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const { data: customers, isLoading } = useGetCustomersQuery();
 
-  const filteredCustomers = customers?.filter(customer =>
-    customer.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    customer.email.toLowerCase().includes(searchQuery.toLowerCase())
-  ) || [];
+  const filteredCustomers =
+    customers?.filter(
+      (customer) =>
+        customer.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        customer.email.toLowerCase().includes(searchQuery.toLowerCase())
+    ) || [];
 
   return (
     <AdminLayout>
@@ -42,7 +44,9 @@ export default function AdminCustomersPage() {
               <div className="flex items-center">
                 <User className="h-8 w-8 text-purple-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Customers</p>
+                  <p className="text-sm font-medium text-gray-600">
+                    Total Customers
+                  </p>
                   <p className="text-2xl font-bold text-gray-900">
                     {customers?.length || 0}
                   </p>
@@ -56,9 +60,11 @@ export default function AdminCustomersPage() {
               <div className="flex items-center">
                 <ShoppingBag className="h-8 w-8 text-green-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Active Customers</p>
+                  <p className="text-sm font-medium text-gray-600">
+                    Active Customers
+                  </p>
                   <p className="text-2xl font-bold text-gray-900">
-                    {customers?.filter(c => c.orders.length > 0).length || 0}
+                    {customers?.filter((c) => c.orders.length > 0).length || 0}
                   </p>
                 </div>
               </div>
@@ -70,9 +76,11 @@ export default function AdminCustomersPage() {
               <div className="flex items-center">
                 <Mail className="h-8 w-8 text-blue-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">New This Month</p>
+                  <p className="text-sm font-medium text-gray-600">
+                    New This Month
+                  </p>
                   <p className="text-2xl font-bold text-gray-900">
-                    {customers?.filter(c => {
+                    {customers?.filter((c) => {
                       const monthAgo = new Date();
                       monthAgo.setMonth(monthAgo.getMonth() - 1);
                       return new Date(c.createdAt) > monthAgo;
@@ -88,12 +96,18 @@ export default function AdminCustomersPage() {
               <div className="flex items-center">
                 <Calendar className="h-8 w-8 text-orange-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Avg. Orders</p>
+                  <p className="text-sm font-medium text-gray-600">
+                    Avg. Orders
+                  </p>
                   <p className="text-2xl font-bold text-gray-900">
-                    {customers?.length > 0 
-                      ? Math.round(customers.reduce((sum, c) => sum + c.orders.length, 0) / customers.length)
-                      : 0
-                    }
+                    {customers?.length > 0
+                      ? Math.round(
+                          customers.reduce(
+                            (sum, c) => sum + c.orders.length,
+                            0
+                          ) / customers?.length
+                        )
+                      : 0}
                   </p>
                 </div>
               </div>
@@ -120,7 +134,10 @@ export default function AdminCustomersPage() {
             {isLoading ? (
               <div className="space-y-4">
                 {[...Array(5)].map((_, i) => (
-                  <div key={i} className="h-16 bg-gray-200 rounded animate-pulse" />
+                  <div
+                    key={i}
+                    className="h-16 bg-gray-200 rounded animate-pulse"
+                  />
                 ))}
               </div>
             ) : (
@@ -137,9 +154,12 @@ export default function AdminCustomersPage() {
                 </TableHeader>
                 <TableBody>
                   {filteredCustomers.map((customer) => {
-                    const totalSpent = customer.orders.reduce((sum, order) => sum + order.total, 0);
+                    const totalSpent = customer.orders.reduce(
+                      (sum, order) => sum + order.total,
+                      0
+                    );
                     const isActive = customer.orders.length > 0;
-                    
+
                     return (
                       <TableRow key={customer.id}>
                         <TableCell>
@@ -148,8 +168,12 @@ export default function AdminCustomersPage() {
                               <User className="h-4 w-4 text-purple-700" />
                             </div>
                             <div>
-                              <div className="font-medium">{customer.name || 'N/A'}</div>
-                              <div className="text-sm text-gray-500">ID: {customer.id.slice(-8)}</div>
+                              <div className="font-medium">
+                                {customer.name || "N/A"}
+                              </div>
+                              <div className="text-sm text-gray-500">
+                                ID: {customer.id.slice(-8)}
+                              </div>
                             </div>
                           </div>
                         </TableCell>
@@ -166,8 +190,8 @@ export default function AdminCustomersPage() {
                           ₦{totalSpent.toLocaleString()}
                         </TableCell>
                         <TableCell>
-                          <Badge variant={isActive ? 'default' : 'secondary'}>
-                            {isActive ? 'Active' : 'Inactive'}
+                          <Badge variant={isActive ? "default" : "secondary"}>
+                            {isActive ? "Active" : "Inactive"}
                           </Badge>
                         </TableCell>
                       </TableRow>
