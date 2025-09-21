@@ -35,6 +35,7 @@ export interface Review {
 }
 
 export interface Category {
+  _count?: any;
   id: string;
   name: string;
   description?: string;
