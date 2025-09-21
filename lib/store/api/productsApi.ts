@@ -1,4 +1,4 @@
-import { apiSlice } from './apiSlice';
+import { apiSlice } from "./apiSlice";
 
 export interface Product {
   id: string;
@@ -43,63 +43,69 @@ export interface Category {
 
 export const productsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getProducts: builder.query<{
-      products: Product[];
-      total: number;
-      totalPages: number;
-    }, {
-      page?: number;
-      limit?: number;
-      search?: string;
-      category?: string;
-      minPrice?: number;
-      maxPrice?: number;
-      scentNotes?: string[];
-      sort?: string;
-      inStock?: boolean;
-    }>({
+    getProducts: builder.query<
+      {
+        products: Product[];
+        total: number;
+        totalPages: number;
+      },
+      {
+        page?: number;
+        limit?: number;
+        search?: string;
+        category?: string;
+        minPrice?: number;
+        maxPrice?: number;
+        scentNotes?: string[];
+        sort?: string;
+        inStock?: boolean;
+      }
+    >({
       query: (params) => ({
-        url: '/products',
+        url: "/products",
         params,
       }),
-      providesTags: ['Product'],
+      providesTags: ["Product"],
     }),
     getProduct: builder.query<Product, string>({
       query: (id) => `/products/${id}`,
-      providesTags: (result, error, id) => [{ type: 'Product', id }],
+      providesTags: (result, error, id) => [{ type: "Product", id }],
     }),
     getCategories: builder.query<Category[], void>({
-      query: () => '/categories',
-      providesTags: ['Category'],
+      query: () => "/categories",
+      providesTags: ["Category"],
     }),
     getFeaturedProducts: builder.query<Product[], void>({
-      query: () => '/products/featured',
-      providesTags: ['Product'],
+      query: () => "/products/featured",
+      providesTags: ["Product"],
     }),
     getBestsellers: builder.query<Product[], void>({
-      query: () => '/products/bestsellers',
-      providesTags: ['Product'],
+      query: () => "/products/bestsellers",
+      providesTags: ["Product"],
     }),
     getNewArrivals: builder.query<Product[], void>({
-      query: () => '/products/new-arrivals',
-      providesTags: ['Product'],
+      query: () => "/products/new-arrivals",
+      providesTags: ["Product"],
     }),
     searchProducts: builder.query<Product[], string>({
       query: (query) => `/products/search?q=${query}`,
-      providesTags: ['Product'],
+      providesTags: ["Product"],
     }),
-    addReview: builder.mutation<void, {
-      productId: string;
-      rating: number;
-      comment: string;
-    }>({
+    addReview: builder.mutation<
+      void,
+      {
+        productId: string;
+        rating: number;
+        comment: string;
+      }
+    >({
       query: ({ productId, ...body }) => ({
         url: `/products/${productId}/reviews`,
-        method: 'POST',
+        method: "POST",
         body,
       }),
       invalidatesTags: (result, error, { productId }) => [
-        { type: 'Product', id: productId },
+        { type: "Product", id: productId },
       ],
     }),
   }),
